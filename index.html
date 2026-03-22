@@ -4,14 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal z Grą</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #f0f2f5; }
+        .siatka-strony {
+            display: grid;
+            grid-template-areas: 
+                "naglowek naglowek"
+                "tresc panel"
+                "stopka stopka";
+            grid-template-columns: 1fr 300px;
+            grid-template-rows: 80px 1fr 60px;
+            gap: 15px;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .naglowek { grid-area: naglowek; background: #2c3e50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .tresc-glowna { grid-area: tresc; display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; }
+        .panel-boczny { grid-area: panel; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; overflow-y: auto; }
+        .stopka { grid-area: stopka; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .karta { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        .grupa-formularza { display: flex; flex-direction: column; margin-bottom: 15px; text-align: left; }
+        .grupa-formularza label { margin-bottom: 5px; font-weight: bold; }
+        .grupa-formularza input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .gra-kontener { display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 20px 0; }
+        .przycisk-okragly { width: 120px; height: 120px; border-radius: 50%; border: none; background: #e67e22; color: white; font-weight: bold; cursor: pointer; font-size: 18px; }
+        .przycisk-okragly:active { transform: scale(0.95); }
+        button { padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-sec { background: #95a5a6; }
+        .btn-reset { background: #e74c3c; font-size: 12px; margin-top: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px 0; border-bottom: 1px solid #eee; }
+    </style>
 </head>
 <body>
     <div class="siatka-strony">
-        <header class="naglowek">
-            <h1>Panel Gracza Pro</h1>
-        </header>
-
+        <header class="naglowek"><h1>Panel Gracza Pro</h1></header>
         <main class="tresc-glowna">
             <div id="sekcjaLogowania" class="karta">
                 <h2>Rejestracja</h2>
@@ -23,7 +51,6 @@
                     <button type="submit">Wejdź do gry</button>
                 </form>
             </div>
-
             <div id="sekcjaGry" class="karta" style="display: none;">
                 <h2>Klikacz</h2>
                 <p>Gracz: <span id="aktualnyGracz"></span></p>
@@ -36,17 +63,77 @@
                 <button id="wyloguj" class="btn-sec">Wyloguj</button>
             </div>
         </main>
-
         <aside class="panel-boczny">
             <h3>Ranking (Baza):</h3>
             <ul id="listaUzytkownikow"></ul>
             <button id="resetBazy" class="btn-reset">Usuń dane</button>
         </aside>
-
-        <footer class="stopka">
-            <p>&copy; 2026 Projekt Grid/Flexbox/Storage</p>
-        </footer>
+        <footer class="stopka"><p>&copy; 2026 Projekt Grid/Flexbox/Storage</p></footer>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        let licznik = 0; let czas = 10; let graTrwa = false; let user = "";
+        const fReg = document.getElementById('formularzReg');
+        const sLog = document.getElementById('sekcjaLogowania');
+        const sGry = document.getElementById('sekcjaGry');
+        const lUzyt = document.getElementById('listaUzytkownikow');
+
+        function odswiezRanking() {
+            lUzyt.innerHTML = '';
+            const dane = JSON.parse(localStorage.getItem('bazaGry')) || {};
+            for (let g in dane) {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${g}</strong>: ${dane[g]} pkt`;
+                lUzyt.appendChild(li);
+            }
+        }
+
+        fReg.addEventListener('submit', (e) => {
+            e.preventDefault();
+            user = document.getElementById('nazwa').value;
+            let dane = JSON.parse(localStorage.getItem('bazaGry')) || {};
+            if (!dane[user]) dane[user] = 0;
+            localStorage.setItem('bazaGry', JSON.stringify(dane));
+            document.getElementById('aktualnyGracz').innerText = user;
+            sLog.style.display = 'none';
+            sGry.style.display = 'block';
+            odswiezRanking();
+        });
+
+        document.getElementById('startGry').addEventListener('click', () => {
+            licznik = 0; czas = 10; graTrwa = true;
+            document.getElementById('wynik').innerText = 0;
+            document.getElementById('timer').innerText = 10;
+            document.getElementById('startGry').disabled = true;
+            let timer = setInterval(() => {
+                czas--; document.getElementById('timer').innerText = czas;
+                if (czas <= 0) {
+                    clearInterval(timer); graTrwa = false;
+                    document.getElementById('startGry').disabled = false;
+                    let dane = JSON.parse(localStorage.getItem('bazaGry'));
+                    if (licznik > dane[user]) {
+                        dane[user] = licznik;
+                        localStorage.setItem('bazaGry', JSON.stringify(dane));
+                    }
+                    odswiezRanking();
+                    alert("Koniec! Wynik: " + licznik);
+                }
+            }, 1000);
+        });
+
+        document.getElementById('przyciskKlik').addEventListener('click', () => {
+            if (graTrwa) { licznik++; document.getElementById('wynik').innerText = licznik; }
+        });
+
+        document.getElementById('wyloguj').addEventListener('click', () => {
+            sGry.style.display = 'none'; sLog.style.display = 'block'; fReg.reset();
+        });
+
+        document.getElementById('resetBazy').addEventListener('click', () => {
+            if(confirm("Usunąć ranking?")) { localStorage.removeItem('bazaGry'); odswiezRanking(); }
+        });
+
+        odswiezRanking();
+    </script>
 </body>
 </html>
