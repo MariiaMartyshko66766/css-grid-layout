@@ -1,41 +1,79 @@
-const formularz = document.getElementById('formularzReg');
-const listaUi = document.getElementById('listaUzytkownikow');
-const przyciskReset = document.getElementById('wyczyscBaze');
+let licznik = 0;
+let czas = 10;
+let graTrwa = false;
+let user = "";
 
-function wyswietlUzytkownikow() {
-    listaUi.innerHTML = '';
-    
-    const uzytkownicy = JSON.parse(localStorage.getItem('bazaUzytkownikow')) || [];
+const fReg = document.getElementById('formularzReg');
+const sLog = document.getElementById('sekcjaLogowania');
+const sGry = document.getElementById('sekcjaGry');
+const lUzyt = document.getElementById('listaUzytkownikow');
 
-    uzytkownicy.forEach(osoba => {
+function odswiezRanking() {
+    lUzyt.innerHTML = '';
+    const dane = JSON.parse(localStorage.getItem('bazaGry')) || {};
+    for (let g in dane) {
         const li = document.createElement('li');
-        li.textContent = osoba.login;
-        listaUi.appendChild(li);
-    });
+        li.innerHTML = `<strong>${g}</strong>: ${dane[g]} pkt`;
+        lUzyt.appendChild(li);
+    }
 }
 
-formularz.addEventListener('submit', (event) => {
-    event.preventDefault(); 
-
-    const login = document.getElementById('nazwa').value;
-    const haslo = document.getElementById('haslo').value;
-
-    const uzytkownicy = JSON.parse(localStorage.getItem('bazaUzytkownikow')) || [];
-
-    uzytkownicy.push({ login: login, haslo: haslo });
-
-    localStorage.setItem('bazaUzytkownikow', JSON.stringify(uzytkownicy));
-
-    formularz.reset();
-    wyswietlUzytkownikow();
-    alert('Zarejestrowano pomyślnie!');
+fReg.addEventListener('submit', (e) => {
+    e.preventDefault();
+    user = document.getElementById('nazwa').value;
+    let dane = JSON.parse(localStorage.getItem('bazaGry')) || {};
+    if (!dane[user]) dane[user] = 0;
+    localStorage.setItem('bazaGry', JSON.stringify(dane));
+    document.getElementById('aktualnyGracz').innerText = user;
+    sLog.style.display = 'none';
+    sGry.style.display = 'block';
+    odswiezRanking();
 });
 
-przyciskReset.addEventListener('click', () => {
-    if(confirm('Czy na pewno chcesz usunąć wszystkich użytkowników?')) {
-        localStorage.removeItem('bazaUzytkownikow');
-        wyswietlUzytkownikow();
+document.getElementById('startGry').addEventListener('click', () => {
+    licznik = 0;
+    czas = 10;
+    graTrwa = true;
+    document.getElementById('wynik').innerText = 0;
+    document.getElementById('timer').innerText = 10;
+    document.getElementById('startGry').disabled = true;
+
+    let timer = setInterval(() => {
+        czas--;
+        document.getElementById('timer').innerText = czas;
+        if (czas <= 0) {
+            clearInterval(timer);
+            graTrwa = false;
+            document.getElementById('startGry').disabled = false;
+            let dane = JSON.parse(localStorage.getItem('bazaGry'));
+            if (licznik > dane[user]) {
+                dane[user] = licznik;
+                localStorage.setItem('bazaGry', JSON.stringify(dane));
+            }
+            odswiezRanking();
+            alert("Koniec! Wynik: " + licznik);
+        }
+    }, 1000);
+});
+
+document.getElementById('przyciskKlik').addEventListener('click', () => {
+    if (graTrwa) {
+        licznik++;
+        document.getElementById('wynik').innerText = licznik;
     }
 });
 
-wyswietlUzytkownikow();
+document.getElementById('wyloguj').addEventListener('click', () => {
+    sGry.style.display = 'none';
+    sLog.style.display = 'block';
+    fReg.reset();
+});
+
+document.getElementById('resetBazy').addEventListener('click', () => {
+    if(confirm("Usunąć ranking?")) {
+        localStorage.removeItem('bazaGry');
+        odswiezRanking();
+    }
+});
+
+odswiezRanking();
