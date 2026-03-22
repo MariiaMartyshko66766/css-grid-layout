@@ -3,30 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Grid Task</title>
+    <title>System Rejestracji</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h2>Zadanie A</h2>
-    <div class="container container-a">
-        <div class="box box1">1</div>
-        <div class="box box2">2</div>
-        <div class="box box3">3</div>
-        <div class="box box4">4</div>
-        <div class="box box5">5</div>
+    <div class="siatka-strony">
+        <header class="naglowek">
+            <h1>Mój Portal Internetowy</h1>
+        </header>
+
+        <main class="tresc-glowna">
+            <div class="karta-rejestracji">
+                <h2>Utwórz konto</h2>
+                <form id="formularzReg">
+                    <div class="grupa-formularza">
+                        <label for="nazwa">Nazwa użytkownika:</label>
+                        <input type="text" id="nazwa" required placeholder="Wpisz login...">
+                    </div>
+                    <div class="grupa-formularza">
+                        <label for="haslo">Hasło:</label>
+                        <input type="password" id="haslo" required placeholder="Wpisz hasło...">
+                    </div>
+                    <button type="submit">Zarejestruj się</button>
+                </form>
+            </div>
+        </main>
+
+        <aside class="panel-boczny">
+            <h3>Zarejestrowani:</h3>
+            <ul id="listaUzytkownikow"></ul>
+            <button id="wyczyscBaze" class="przycisk-reset">Wyczyść listę</button>
+        </aside>
+
+        <footer class="stopka">
+            <p>&copy; 2026 Projekt Programistyczny - Wszystkie prawa zastrzeżone</p>
+        </footer>
     </div>
 
-    <hr>
-
-    <h2>Zadanie B</h2>
-    <div class="container container-b">
-        <div class="box box1">1</div>
-        <div class="box box2">2</div>
-        <div class="box box3">3</div>
-        <div class="box box4">4</div>
-        <div class="box box5">5</div>
-    </div>
-
+    <script src="script.js"></script>
 </body>
 </html>
