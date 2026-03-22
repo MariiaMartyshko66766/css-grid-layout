@@ -3,44 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Rejestracji</title>
+    <title>Portal z Grą</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="siatka-strony">
         <header class="naglowek">
-            <h1>Mój Portal Internetowy</h1>
+            <h1>Panel Gracza Pro</h1>
         </header>
 
         <main class="tresc-glowna">
-            <div class="karta-rejestracji">
-                <h2>Utwórz konto</h2>
+            <div id="sekcjaLogowania" class="karta">
+                <h2>Rejestracja</h2>
                 <form id="formularzReg">
                     <div class="grupa-formularza">
-                        <label for="nazwa">Nazwa użytkownika:</label>
-                        <input type="text" id="nazwa" required placeholder="Wpisz login...">
+                        <label>Twój Nick:</label>
+                        <input type="text" id="nazwa" required>
                     </div>
-                    <div class="grupa-formularza">
-                        <label for="haslo">Hasło:</label>
-                        <input type="password" id="haslo" required placeholder="Wpisz hasło...">
-                    </div>
-                    <button type="submit">Zarejestruj się</button>
+                    <button type="submit">Wejdź do gry</button>
                 </form>
+            </div>
+
+            <div id="sekcjaGry" class="karta" style="display: none;">
+                <h2>Klikacz</h2>
+                <p>Gracz: <span id="aktualnyGracz"></span></p>
+                <div class="gra-kontener">
+                    <div class="stat">Czas: <span id="timer">10</span>s</div>
+                    <div class="stat">Wynik: <span id="wynik">0</span></div>
+                    <button id="przyciskKlik" class="przycisk-okragly">KLIK!</button>
+                </div>
+                <button id="startGry">Start</button>
+                <button id="wyloguj" class="btn-sec">Wyloguj</button>
             </div>
         </main>
 
         <aside class="panel-boczny">
-            <h3>Zarejestrowani:</h3>
+            <h3>Ranking (Baza):</h3>
             <ul id="listaUzytkownikow"></ul>
-            <button id="wyczyscBaze" class="przycisk-reset">Wyczyść listę</button>
+            <button id="resetBazy" class="btn-reset">Usuń dane</button>
         </aside>
 
         <footer class="stopka">
-            <p>&copy; 2026 Projekt Programistyczny - Wszystkie prawa zastrzeżone</p>
+            <p>&copy; 2026 Projekt Grid/Flexbox/Storage</p>
         </footer>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
