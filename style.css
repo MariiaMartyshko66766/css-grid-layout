@@ -1,91 +1,35 @@
+body { margin: 0; font-family: sans-serif; background: #f0f2f5; }
+
 .siatka-strony {
     display: grid;
     grid-template-areas: 
         "naglowek naglowek"
         "tresc panel"
         "stopka stopka";
-    grid-template-columns: 3fr 1fr; 
-    grid-template-rows: 100px 1fr 60px;
-    gap: 20px;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 80px 1fr 60px;
+    gap: 15px;
     height: 100vh;
     padding: 10px;
-    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-.naglowek { 
-    grid-area: naglowek; 
-    background-color: #2c3e50; 
-    color: white; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
+.naglowek { grid-area: naglowek; background: #2c3e50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.tresc-glowna { grid-area: tresc; display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; }
+.panel-boczny { grid-area: panel; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; overflow-y: auto; }
+.stopka { grid-area: stopka; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
 
-.tresc-glowna { 
-    grid-area: tresc; 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; 
-    padding-top: 40px;
-}
+.karta { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+.grupa-formularza { display: flex; flex-direction: column; margin-bottom: 15px; text-align: left; }
+.grupa-formularza label { margin-bottom: 5px; font-weight: bold; }
+.grupa-formularza input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
 
-.panel-boczny { 
-    grid-area: panel; 
-    background-color: #ecf0f1; 
-    padding: 20px; 
-    border-radius: 8px;
-}
+.gra-kontener { display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 20px 0; }
+.przycisk-okragly { width: 120px; height: 120px; border-radius: 50%; border: none; background: #e67e22; color: white; font-weight: bold; cursor: pointer; font-size: 18px; }
+.przycisk-okragly:active { transform: scale(0.95); }
 
-.stopka { 
-    grid-area: stopka; 
-    background-color: #34495e; 
-    color: white; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
-.karta-rejestracji {
-    background: #fff;
-    padding: 30px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 350px;
-}
-
-.grupa-formularza {
-    display: flex;
-    flex-direction: column; 
-    margin-bottom: 15px;
-}
-
-.grupa-formularza label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.grupa-formularza input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover { background-color: #219150; }
-
-.przycisk-reset {
-    margin-top: 20px;
-    background-color: #e74c3c;
-    font-size: 12px;
-}
+button { padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+.btn-sec { background: #95a5a6; }
+.btn-reset { background: #e74c3c; font-size: 12px; }
+ul { list-style: none; padding: 0; }
+li { padding: 8px 0; border-bottom: 1px solid #eee; }
